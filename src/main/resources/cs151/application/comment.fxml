@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+        <VBox spacing="12" alignment="CENTER"
+              prefWidth="560" prefHeight="500" xmlns="http://javafx.com/javafx"
+              xmlns:fx="http://javafx.com/fxml"
+              fx:controller="cs151.application.CommentController"
+               style="-fx-background-color: #C9E8C7">
+
+
+            <Label text="Comments Page" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Label text="Add comments to student profile over time"/>
+
+            <Label text="Comments: "/>
+                    <TextArea fx:id="taComments" promptText="faculty comments.." wrapText="true" prefRowCount="6"
+                              style="-fx-border-color: #0C5007" maxWidth="400"/>
+
+                    <Label text="" style="-fx-font-size: 5px"/>
+
+                    <HBox spacing="8" alignment="CENTER">
+                    <Button text="Save" onAction="#save" style="-fx-border-color: #0C5007; -fx-text-fill: #0C5007;"/>
+                    <Button text="Back to Search" onAction="#searchProf" style="-fx-border-color: #0C5007; -fx-text-fill: #0C5007;"/>
+                    </HBox>
+
+
+        </VBox>
+
