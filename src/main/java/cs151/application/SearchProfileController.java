@@ -160,11 +160,13 @@ public class SearchProfileController {
         if (!requiredFields()) return;
 
         var profiles = DataStore.getFullName();
-        StudentProfile target = null;
-        if (target == null && profiles.size() >= 5) {
-            error("Only 5 student profiles are allowed.");
+
+        StudentProfile target = profilesTable.getSelectionModel().getSelectedItem();
+        if (target == null) {
+            new Alert(Alert.AlertType.WARNING, "Please select a profile to save changes for.").showAndWait();
             return;
         }
+
         final String status   = dropdown.getValue();
         final boolean employed= toggleButton.isSelected();
         final String job      = textField.getText().trim();
@@ -176,6 +178,7 @@ public class SearchProfileController {
         target.setPreferredRole(role);
 
         DataStore.saveProfiles();
+        new Alert(Alert.AlertType.INFORMATION, "Saved changes for: " + target.getName()).showAndWait();
     }
 
     private void swapScene(ActionEvent event, String fxml, int w, int h, String title) {

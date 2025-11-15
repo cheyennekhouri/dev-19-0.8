@@ -1,6 +1,7 @@
 package cs151.application;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 public class StudentProfile  implements Comparable<StudentProfile> {
     private String name;
     private String major;
@@ -11,6 +12,7 @@ public class StudentProfile  implements Comparable<StudentProfile> {
     private String jobDetails;
     private String preferredRole;
     private String comments;
+    private List<Comment> commentList;
     private boolean whiteList;
     private boolean blackList;
 
@@ -22,6 +24,7 @@ public class StudentProfile  implements Comparable<StudentProfile> {
         this.jobDetails = "";
         this.preferredRole = "";
         this.comments = "";
+        this.commentList = new ArrayList<>();
         this.whiteList = false;
         this.blackList = false;
     }
@@ -51,10 +54,11 @@ public class StudentProfile  implements Comparable<StudentProfile> {
     }
     // Languages
     public List<String> getLanguages() {
+        if (languages == null) languages = new ArrayList<>();
         return languages;
     }
     public void setLanguages(List<String> languages) {
-        this.languages = languages;
+        this.languages = languages == null ? new ArrayList<>() : new ArrayList<>(languages);
     }
     // dropdown
     public String getAcademicStatus() {
@@ -91,12 +95,40 @@ public class StudentProfile  implements Comparable<StudentProfile> {
     public void setPreferredRole(String preferredRole) {
         this.preferredRole = preferredRole;
     }
-    // Text
+
     public String getComments() {
-        return comments;
+        if (commentList != null && !commentList.isEmpty()) {
+            return commentList.stream().map(comment -> comment == null ? "" : comment.toString())
+                    .collect(Collectors.joining("\n"));
+        }
+        return comments == null ? "" : comments;
     }
     public void setComments(String comments) {
-        this.comments = comments;
+        this.comments = comments == null ? "" : comments;
+        this.commentList = new ArrayList<>();
+        if (comments != null && !comments.isEmpty()) {
+            this.commentList.add(new Comment("", comments));
+        }
+    }
+    // Structured Comment Text
+    public List<Comment> getCommentList() {
+        if(commentList == null) commentList = new ArrayList<>();
+        return commentList;
+    }
+    public void setCommentList(List<Comment> comments) {
+        this.commentList = comments == null ? new ArrayList<>() : new ArrayList<>(comments);
+    }
+    public void addComment(Comment comment){
+        if(comment == null) return;
+        if(commentList == null) commentList = new ArrayList<>();
+        commentList.add(comment);
+    }
+    // Serialize structured comments
+    public String getCommentsCell() {
+        if (commentList == null || commentList.isEmpty()) return "";
+        return commentList.stream()
+                .map(comment -> (comment.getDate() == null ? "" : comment.getDate()) + ":::" +
+                (comment.getText() == null ? "" : comment.getText())).collect(Collectors.joining("|||"));
     }
     // WhiteList
     public boolean isWhiteList() {

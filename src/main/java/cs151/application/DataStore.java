@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class DataStore {
@@ -210,7 +211,8 @@ public final class DataStore {
                             csv(sp.getJobDetails()),
                             csv(langsJoined),
                             csv(sp.getPreferredRole()),
-                            csv(sp.getComments()),
+//                            csv(sp.getComments()),
+                            csv(sp.getCommentsCell()),
                             csv(Boolean.toString(sp.isWhiteList())),
                             csv(Boolean.toString(sp.isBlackList())));
                     bw.write(line);
@@ -249,7 +251,8 @@ public final class DataStore {
                 }
 
                 sp.setPreferredRole(c[6]);
-                sp.setComments(c[7]);
+//                sp.setComments(c[7]);
+                sp.setCommentList(parseCommentsCell(c[7]));
                 sp.setWhiteList(Boolean.parseBoolean(c[8]));
                 sp.setBlackList(Boolean.parseBoolean(c[9]));
 
@@ -259,4 +262,22 @@ public final class DataStore {
             e.printStackTrace();
         }
     }
+    private static List<Comment> parseCommentsCell(String cell) {
+        List<Comment> out = new ArrayList<>();
+        if (cell == null || cell.isEmpty()) return out;
+        if (!cell.contains(":::")) {
+            out.add(new Comment("", cell));
+            return out;
+        }
+        String[] entries = cell.split("\\|\\|\\|", -1);
+        for (String e : entries) {
+            if (e == null || e.isEmpty()) continue;
+            String[] parts = e.split(":::", 2);
+            String date = parts.length > 0 ? parts[0] : "";
+            String text = parts.length > 1 ? parts[1] : "";
+            out.add(new Comment(date, text));
+        }
+        return out;
+    }
 }
+

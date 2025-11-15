@@ -2,6 +2,10 @@ package cs151.application;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
@@ -10,10 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import javafx.scene.control.cell.PropertyValueFactory;
-
-import java.util.Comparator;
 
 public class MainController {
     @FXML private Label popUp;
@@ -32,95 +33,80 @@ public class MainController {
     @FXML private TextField textField;
 
     @FXML private TableColumn<StudentProfile, String> statusCol, empCol, roleCol;
-    @FXML
-    private ListView<String> multiSelectListView;
+    @FXML private ListView<String> multiSelectListView;
 
     @FXML
     public void initializer() {
         ObservableList<String> items = FXCollections.observableArrayList("MySQL", "Postgres", "MongoDB");
-        multiSelectListView.setItems(items);
-
-        multiSelectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        if (multiSelectListView != null) {
+            multiSelectListView.setItems(items);
+            multiSelectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        }
     }
 
     @FXML
     private void initialize() {
+        // Programming languages table
         if (tableView != null) {
             langCol.setCellValueFactory(new PropertyValueFactory<>("programmingLanguage"));
-            ObservableList<ProgrammingLanguages> langs =
-                    FXCollections.observableArrayList(DataStore.getList());
-            langs.sort(Comparator.comparing(
-                    ProgrammingLanguages::getProgrammingLanguage, String.CASE_INSENSITIVE_ORDER));
+            ObservableList<ProgrammingLanguages> langs = DataStore.getList(); // use backing list
             tableView.setItems(langs);
             langCol.prefWidthProperty().bind(tableView.widthProperty().multiply(0.5));
         }
+
+        // Multi-select ListView for programming languages
         if (languagesList != null) {
             ObservableList<String> opts = FXCollections.observableArrayList(
                     DataStore.getList().stream()
-                            .map(ProgrammingLanguages::getProgrammingLanguage).toList()
+                            .map(ProgrammingLanguages::getProgrammingLanguage).collect(Collectors.toList())
             );
             languagesList.setItems(opts);
             languagesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         }
-        if (multiSelectListView != null) {
+
+        // Multi-select ListView for databases
+        if (multiSelectListView != null && (multiSelectListView.getItems() == null || multiSelectListView.getItems().isEmpty())) {
             multiSelectListView.setItems(FXCollections.observableArrayList("MySQL", "Postgres", "MongoDB"));
             multiSelectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         }
+
+        // Student profiles table
         if (nameTable != null && nameCol != null) {
             nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-            //statusCol.setCellValueFactory(new PropertyValueFactory<>("academicStatus"));
-            /*empCol.setCellValueFactory(cell ->
-                    new javafx.beans.property.SimpleStringProperty(
-                            cell.getValue().isEmployed() ? "Employed" : "Not Employed"));
-            roleCol.setCellValueFactory(new PropertyValueFactory<>("preferredRole"));*/
-            nameTable.setItems(DataStore.getFullName());
-            nameTable.getItems().sort(java.util.Comparator.comparing(
+            ObservableList<StudentProfile> profiles = DataStore.getFullName(); // backing list
+            nameTable.setItems(profiles);
+            nameTable.getItems().sort(Comparator.comparing(
                     StudentProfile::getName, String.CASE_INSENSITIVE_ORDER));
-        }
-    }
-
-    @FXML
-    private void initializeProf() {
-        if (nameTable != null) {
-            nameCol.setCellValueFactory(new PropertyValueFactory<>("Student Profile"));
-
-            ObservableList<StudentProfile> fullName = FXCollections.observableArrayList(DataStore.getFullName());
-            Comparator<StudentProfile> nameCompare = Comparator.comparing
-                    (StudentProfile::getName, String.CASE_INSENSITIVE_ORDER);
-
-            fullName.sort(nameCompare);
-
-            nameTable.setItems(fullName);
             nameCol.prefWidthProperty().bind(nameTable.widthProperty().multiply(0.5));
         }
     }
 
-    //front page
+    //navigate to home page
     @FXML
     protected void onNavigateButtonClick(ActionEvent event) {
         swapScene(event, "/cs151/application/hello-view.fxml", 320, 240, "KnowledgeTrack");
     }
-    //homepage, contains: define lang, profile, back to front
+    //home page
     @FXML
     private void goBackToHome(ActionEvent event) {
         swapScene(event, "/cs151/application/home.fxml", 340, 260, "KnowledgeTrack Home");
     }
-    //saved lang table, contains: table, back to define lang
+    //programming languages table, contains: table, back to define lang
     @FXML
     protected void programmingLanguagesTable(ActionEvent event){
         swapScene(event, "/cs151/application/program_table.fxml", 400, 300, "Saved Languages");
     }
-    //student profile, add name, contains: save, edit, view saved profiles, back to home
+    //student profile, contains: form, save button, saved profiles, search profiles
     @FXML
     protected void studentProfile(ActionEvent event) {
         swapScene(event, "/cs151/application/student.fxml", 600, 400, "Student Profile");
     }
-    //saved profiles, contains: list of profiles, back to making student profile
+    //saved profiles, contains: table, back to student profile
     @FXML
     protected void savedProfile(ActionEvent event) {
         swapScene(event, "/cs151/application/saved_profile.fxml", 400, 300, "Saved Profiles");
     }
-    //define languages, add langs, contains: save, edit, view saved langs, back to home
+    //define programming languages
     @FXML
     protected void programmingLang(ActionEvent event) {
         swapScene(event, "/cs151/application/programming_languages.fxml", 640, 420, "Programming Languages");
@@ -218,6 +204,4 @@ public class MainController {
             e.printStackTrace();
         }
     }
-
-
 }
