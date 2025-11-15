@@ -4,7 +4,7 @@
 
 # who did what:
 1. Sean Reece Calantoc: 
-2. Kanishka Yadav: 
+2. Kanishka Yadav: Implemented structured commentsand updates StudentProfile and DataStore
 3. Hoang Khang Pham: 
 4. Cheyenne Khouri: Created functional comments page and CommentController, loaded all previous comments, save new comments 
 
