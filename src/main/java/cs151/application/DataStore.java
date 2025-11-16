@@ -88,28 +88,106 @@ public final class DataStore {
     }
     private static void seedDefaultProfilesIfAbsent() {
         if (Files.exists(PROFILE_FILE)) return;
+
         try {
             if (!Files.exists(DATA_DIR)) Files.createDirectories(DATA_DIR);
-            try (BufferedWriter bw = Files.newBufferedWriter(PROFILE_FILE, StandardCharsets.UTF_8)) {
-                bw.write(String.join(",", "name","major","academicStatus","employment",
-                        "jobDetails","languages","preferredRole","comments","whiteList","blackList"));
+
+            try (BufferedWriter bw = Files.newBufferedWriter(
+                    PROFILE_FILE, StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+
+                bw.write(String.join(",", "name", "major", "academicStatus", "employment",
+                        "jobDetails", "languages", "preferredRole",
+                        "achievements", "skills", "comments", "whiteList", "blackList"));
                 bw.newLine();
-                bw.write("\"Hoang\",\"Software Engineering\",\"Junior\",\"Employed\",\"TA at SJSU\",\"Java|Python|SQL\",\"Backend\",\"Prefers APIs\",\"true\",\"false\"");
+
+                bw.write(String.join(",",
+                        csv("Hoang"),
+                        csv("Software Engineering"),
+                        csv("Junior"),
+                        csv("Employed"),
+                        csv("TA at SJSU"),
+                        csv("Java|Python|SQL"),
+                        csv("Backend"),
+                        csv("Prefers APIs"),
+                        csv("REST APIs, debugging"),
+                        csv(""),
+                        csv("true"),
+                        csv("false")
+                ));
                 bw.newLine();
-                bw.write("\"Che\",\"Computer Science\",\"Senior\",\"Not Employed\",\"\",\"JavaScript|TypeScript|React\",\"Frontend\",\"Good with UX\",\"false\",\"false\"");
+
+
+                bw.write(String.join(",",
+                        csv("Che"),
+                        csv("Computer Science"),
+                        csv("Senior"),
+                        csv("Not Employed"),
+                        csv(""),
+                        csv("JavaScript|TypeScript|React"),
+                        csv("Frontend"),
+                        csv("Good with UX"),
+                        csv("React, Figma"),
+                        csv(""),
+                        csv("false"),
+                        csv("false")
+                ));
                 bw.newLine();
-                bw.write("\"Kanishka\",\"Data Science\",\"Sophomore\",\"Employed\",\"Data Intern\",\"Python|R|Pandas\",\"Data\",\"Loves ML\",\"false\",\"false\"");
+
+
+                bw.write(String.join(",",
+                        csv("Kanishka"),
+                        csv("Data Science"),
+                        csv("Sophomore"),
+                        csv("Employed"),
+                        csv("Data Intern"),
+                        csv("Python|R|Pandas"),
+                        csv("Data"),
+                        csv("Loves ML projects"),
+                        csv("Pandas, NumPy"),
+                        csv(""),
+                        csv("false"),
+                        csv("false")
+                ));
                 bw.newLine();
-                bw.write("\"Ryhs\",\"Software Engineering\",\"Senior\",\"Employed\",\"QA Engineer\",\"Java|Spring|JUnit\",\"QA/DevOps\",\"Testing focus\",\"false\",\"false\"");
+
+
+                bw.write(String.join(",",
+                        csv("Ryhs"),
+                        csv("Software Engineering"),
+                        csv("Senior"),
+                        csv("Employed"),
+                        csv("QA Engineer"),
+                        csv("Java|Spring|JUnit"),
+                        csv("QA/DevOps"),
+                        csv("Testing focus"),
+                        csv("JUnit, CI/CD"),
+                        csv(""),
+                        csv("false"),
+                        csv("false")
+                ));
                 bw.newLine();
-                bw.write("\"Lyly\",\"Computer Engineering\",\"Junior\",\"Not Employed\",\"\",\"C++|Embedded C|Python\",\"Embedded\",\"Boards & sensors\",\"false\",\"false\"");
+
+
+                bw.write(String.join(",",
+                        csv("Lyly"),
+                        csv("Computer Engineering"),
+                        csv("Junior"),
+                        csv("Not Employed"),
+                        csv(""),
+                        csv("C++|Embedded C|Python"),
+                        csv("Embedded"),
+                        csv("Boards & sensors"),
+                        csv("Microcontrollers, C++"),
+                        csv(""),
+                        csv("false"),
+                        csv("false")
+                ));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 
     private static String csv(String s) {
         if (s == null) s = "";

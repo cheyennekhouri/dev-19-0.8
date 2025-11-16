@@ -4,8 +4,8 @@
 
 # who did what:
 1. Sean Reece Calantoc: Added achievements/skills support, updated the edit page, and fixed search filtering
-2. Kanishka Yadav: Implemented structured commentsand updates StudentProfile and DataStore
-3. Hoang Khang Pham: 
+2. Kanishka Yadav: Implemented structured comments and updates StudentProfile and DataStore
+3. Hoang Khang Pham: Debugged and reimplemented "Add comment" features, fixed 5 students profiles and languages
 4. Cheyenne Khouri: Created functional comments page and CommentController, loaded all previous comments, save new comments 
 
 # Any other instruction that users need to know:

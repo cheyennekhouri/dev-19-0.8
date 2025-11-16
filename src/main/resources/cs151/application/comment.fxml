@@ -28,8 +28,7 @@
     <Label text="" style="-fx-font-size: 5px"/>
 
     <HBox spacing="8" alignment="CENTER">
-        <Button text="Add" onAction="#addComment" style="-fx-border-color: #0C5007; -fx-text-fill: #0C5007;"/>
-        <Button text="Save" onAction="#save" style="-fx-border-color: #0C5007; -fx-text-fill: #0C5007;"/>
+        <Button text="Save Comment" onAction="#addComment" style="-fx-border-color: #0C5007; -fx-text-fill: #0C5007;"/>
         <Button text="Back to Search" onAction="#searchProf" style="-fx-border-color: #0C5007; -fx-text-fill: #0C5007;"/>
     </HBox>
 </VBox>
