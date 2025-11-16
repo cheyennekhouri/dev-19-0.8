@@ -196,9 +196,9 @@ public final class DataStore {
                     PROFILE_FILE, StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
 
-                // header (10 columns)
+                // header (12 columns)
                 bw.write(String.join(",", "name", "major", "academicStatus", "employment",
-                        "jobDetails", "languages", "preferredRole", "comments", "whiteList", "blackList"));
+                        "jobDetails", "languages", "preferredRole", "achievements", "skills", "comments", "whiteList", "blackList"));
                 bw.newLine();
 
                 for (StudentProfile sp : NAME) {
@@ -212,6 +212,8 @@ public final class DataStore {
                             csv(langsJoined),
                             csv(sp.getPreferredRole()),
 //                            csv(sp.getComments()),
+                            csv(sp.getAchievements()),
+                            csv(sp.getSkills()),
                             csv(sp.getCommentsCell()),
                             csv(Boolean.toString(sp.isWhiteList())),
                             csv(Boolean.toString(sp.isBlackList())));
@@ -231,7 +233,7 @@ public final class DataStore {
         try (BufferedReader br = Files.newBufferedReader(PROFILE_FILE, StandardCharsets.UTF_8)) {
             String header = br.readLine(); // skip header
             for (String row; (row = br.readLine()) != null; ) {
-                String[] c = parseCsvLine(row, 10);
+                String[] c = parseCsvLine(row, 12);
                 if (c == null) continue;
 
                 // c[0]=name, c[1]=major, c[2]=academicStatus, c[3]=employment,
@@ -252,9 +254,11 @@ public final class DataStore {
 
                 sp.setPreferredRole(c[6]);
 //                sp.setComments(c[7]);
-                sp.setCommentList(parseCommentsCell(c[7]));
-                sp.setWhiteList(Boolean.parseBoolean(c[8]));
-                sp.setBlackList(Boolean.parseBoolean(c[9]));
+                sp.setAchievements(c[7]);
+                sp.setSkills(c[8]);
+                sp.setCommentList(parseCommentsCell(c[9]));
+                sp.setWhiteList(Boolean.parseBoolean(c[10]));
+                sp.setBlackList(Boolean.parseBoolean(c[11]));
 
                 NAME.add(sp);
             }

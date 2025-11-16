@@ -31,6 +31,12 @@ public class SearchProfileController {
     @FXML private RadioButton toggleButton;
     @FXML private TextField textField;
 
+    @FXML private TextField tfFilterAchievements;
+    @FXML private TextField tfFilterStatus;
+    @FXML private TextField tfFilterCareerGoals;
+    @FXML private Button btnApplyFilters;
+    @FXML private Button btnResetFilters;
+
     private ObservableList<StudentProfile> allProfiles;
 
     @FXML
@@ -50,6 +56,12 @@ public class SearchProfileController {
         }/* else {
             statusLabel.setText(allProfiles.size() + " profiles loaded.");
         }*/
+        if (btnApplyFilters != null) {
+            btnApplyFilters.setOnAction(e -> onApplyFilters());
+        }
+        if (btnResetFilters != null) {
+            btnResetFilters.setOnAction(e -> onResetFilters());
+        }
     }
 
     @FXML
@@ -88,6 +100,51 @@ public class SearchProfileController {
         searchField.clear();
         profilesTable.setItems(allProfiles);
         statusLabel.setText("Showing all profiles.");
+    }
+
+    private void onApplyFilters() {
+        String ach = safeLower(tfFilterAchievements);
+        String stat = safeLower(tfFilterStatus);
+        String career = safeLower(tfFilterCareerGoals);
+
+        ObservableList<StudentProfile> filtered = allProfiles.filtered(p -> {
+            boolean ok = true;
+
+            if (!ach.isEmpty()) {
+                String a = p.getAchievements() == null ? "" : p.getAchievements().toLowerCase();
+                ok &= a.contains(ach);
+            }
+            if (!stat.isEmpty()) {
+                String s = p.getAcademicStatus() == null ? "" : p.getAcademicStatus().toLowerCase();
+                ok &= s.contains(stat);
+            }
+            if (!career.isEmpty()) {
+                // Treat "career goals" as preferredRole
+                String r = p.getPreferredRole() == null ? "" : p.getPreferredRole().toLowerCase();
+                ok &= r.contains(career);
+            }
+            return ok;
+        });
+
+        profilesTable.setItems(filtered);
+        if (filtered.isEmpty()) {
+            statusLabel.setText("No profiles match the filters.");
+        } else {
+            statusLabel.setText(filtered.size() + " profile(s) match the filters.");
+        }
+    }
+
+    private void onResetFilters() {
+        if (tfFilterAchievements != null) tfFilterAchievements.clear();
+        if (tfFilterStatus != null) tfFilterStatus.clear();
+        if (tfFilterCareerGoals != null) tfFilterCareerGoals.clear();
+        profilesTable.setItems(allProfiles);
+        statusLabel.setText("Filters cleared. Showing all profiles.");
+    }
+
+    private String safeLower(TextField tf) {
+        if (tf == null || tf.getText() == null) return "";
+        return tf.getText().trim().toLowerCase();
     }
 
     @FXML

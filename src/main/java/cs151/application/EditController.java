@@ -25,6 +25,8 @@ public class EditController {
     @FXML private TextArea taComments;
     @FXML private CheckBox cbWhitelist;
     @FXML private CheckBox cbBlacklist;
+    @FXML private TextArea lvAchievements;
+    @FXML private TextArea lvSkills;
 
     private StudentProfile current;
 
@@ -91,6 +93,13 @@ public class EditController {
         cbWhitelist.setSelected(p.isWhiteList());
         cbBlacklist.setSelected(p.isBlackList());
 
+        if (lvAchievements != null) {
+            lvAchievements.setText(nvl(p.getAchievements()));
+        }
+        if (lvSkills != null) {
+            lvSkills.setText(nvl(p.getSkills()));
+        }
+
         System.out.println("[Edit] Loaded: " + p.getName());
     }
 
@@ -120,6 +129,13 @@ public class EditController {
 
         current.setWhiteList(cbWhitelist.isSelected());
         current.setBlackList(cbBlacklist.isSelected());
+
+        if (lvAchievements != null) {
+            current.setAchievements(lvAchievements.getText());
+        }
+        if (lvSkills != null) {
+            current.setSkills(lvSkills.getText());
+        }
 
         DataStore.replaceByName(current);
 

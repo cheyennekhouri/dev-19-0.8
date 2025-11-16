@@ -15,6 +15,8 @@ public class StudentProfile  implements Comparable<StudentProfile> {
     private List<Comment> commentList;
     private boolean whiteList;
     private boolean blackList;
+    private String achievments;
+    private String skills;
 
     public StudentProfile(){
         this.name = "";
@@ -27,8 +29,11 @@ public class StudentProfile  implements Comparable<StudentProfile> {
         this.commentList = new ArrayList<>();
         this.whiteList = false;
         this.blackList = false;
+        this.achievments = "";
+        this.skills = "";
     }
     public StudentProfile(String name, String major, List<String> languages){
+        this();
         setName(name);
         setMajor(major);
         setLanguages(languages);
@@ -94,6 +99,21 @@ public class StudentProfile  implements Comparable<StudentProfile> {
     }
     public void setPreferredRole(String preferredRole) {
         this.preferredRole = preferredRole;
+    }
+
+    //Achievements
+    public String getAchievements() {
+        return achievments == null ? "" : achievments;
+    }
+    public void setAchievements(String achievements) {
+        this.achievments = achievements == null ? "" : achievements;
+    }
+    //skills
+    public String getSkills() {
+        return skills == null ? "" : skills;
+    }
+    public void setSkills(String skills) {
+        this.skills = skills == null ? "" : skills;
     }
 
     public String getComments() {
